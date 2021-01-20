@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 
 router.delete("/:itemID", async (req, res) => {
   try {
-    const itemToDelete = await RepeatingItem.remove({ _id: req.params.itemID });
+    const itemToDelete = await RepeatingItem.deleteOne({ _id: req.params.itemID });
     res.json(itemToDelete);
   } catch (err) {
     res.json(err);

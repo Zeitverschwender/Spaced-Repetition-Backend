@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 
 router.delete("/:intervalID", async (req, res) => {
   try {
-    const intervalToDelete = await RepeatingInterval.remove({ _id: req.params.intervalID });
+    const intervalToDelete = await RepeatingInterval.deleteOne({ _id: req.params.intervalID });
     res.json(intervalToDelete);
   } catch (err) {
     res.json(err);
