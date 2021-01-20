@@ -32,9 +32,10 @@ mongoose.connect(
 
 //Import Routes
 const itemsRoute = require("./routes/repeatingItems");
-
+const intervalsRoute = require("./routes/repeatingIntervals");
 //Routes
 app.use("/repeatingitems", itemsRoute);
+app.use("/repeatingintervals", intervalsRoute);
 
 app.get("/", (req, res) => {
   res.send("You are in the homepage!!");
