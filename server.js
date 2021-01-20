@@ -1,8 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const cors = require("cors");
+require("dotenv").config();
 
 //Setup App
 const app = express();
@@ -13,28 +13,32 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 8000;
 
-
 //Connect to DB
-mongoose.set('useUnifiedTopology', true);
-mongoose.set('useNewUrlParser', true);
+mongoose.set("useUnifiedTopology", true);
+mongoose.set("useNewUrlParser", true);
 mongoose.connect(
-    process.env.DB_CONNECTION, {
-        useNewUrlParser: true
-    },
-    () => {
-        console.log('Connected to Database successfully.');
+  process.env.DB_CONNECTION,
+  {
+    useNewUrlParser: true,
+  },
+  (err) => {
+    if (err) {
+      console.log(`Failed to Connect to MongoB. Error: ${err}`);
+    } else {
+      console.log("Connectd to MongoDB");
     }
-)
+  }
+);
 
 //Import Routes
-const itemsRoute = require('./routes/repeatingItems');
+const itemsRoute = require("./routes/repeatingItems");
 
 //Routes
-app.use('/repeatingitems', itemsRoute);
+app.use("/repeatingitems", itemsRoute);
 
-app.get('/', (req,res) => {
-    res.send('You are in the homepage!!');
-})
+app.get("/", (req, res) => {
+  res.send("You are in the homepage!!");
+});
 app.listen(port, () => {
-    console.log(`Server running on port: ${port}`);
+  console.log(`Server running on port: ${port}`);
 });
