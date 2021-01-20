@@ -14,12 +14,11 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 8000;
 
 //Connect to DB
-mongoose.set("useUnifiedTopology", true);
-mongoose.set("useNewUrlParser", true);
 mongoose.connect(
   process.env.DB_CONNECTION,
   {
     useNewUrlParser: true,
+    useUnifiedTopology: true
   },
   (err) => {
     if (err) {
