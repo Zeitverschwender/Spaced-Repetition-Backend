@@ -2,14 +2,8 @@ const mongoose = require('mongoose');
 
 const RepeatingItemSchema = mongoose.Schema({
     title:{
-        versionKey: false,
         type: String,
-        required: true,
-        strict: true,
-        timestamps: {
-            createdAt: "createdAt",
-            updatedAt: "updatedAt"
-        }
+        required: true
     },
     description: {
         type: String,
@@ -18,12 +12,6 @@ const RepeatingItemSchema = mongoose.Schema({
     days: {
         type: [Number],
         required: true,
-        strict: true,
-        versionKey: false,
-        timestamps: {
-            createdAt: "createdAt",
-            updatedAt: "updatedAt"
-        }
     }
 
 },{
