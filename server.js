@@ -2,7 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const session = require("express-session");
+const passport = require('passport')
 require("dotenv").config();
+
+//Setup Passport
+require('./passport')(passport);
 
 //Setup App
 const app = express();
@@ -10,6 +15,16 @@ const app = express();
 app.use(cors());
 
 app.use(bodyParser.json());
+
+//Session
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+//Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session())
 
 const port = process.env.PORT || 8000;
 
@@ -32,9 +47,11 @@ mongoose.connect(
 //Import Routes
 const itemsRoute = require("./routes/repeatingItems");
 const intervalsRoute = require("./routes/repeatingIntervals");
+const authRoute = require("./routes/auth");
 //Routes
 app.use("/repeatingitems", itemsRoute);
 app.use("/repeatingintervals", intervalsRoute);
+app.use("/auth", authRoute);
 
 app.get("/", (req, res) => {
   res.send("You are in the homepage!!");
