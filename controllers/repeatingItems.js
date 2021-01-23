@@ -35,7 +35,6 @@ module.exports = {
       const itemToDelete = await RepeatingItem.deleteOne({
         _id: req.params.itemID,
       });
-      res.json(itemToDelete);
     } catch (err) {
       res.json(err);
     }

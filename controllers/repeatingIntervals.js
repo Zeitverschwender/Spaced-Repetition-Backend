@@ -35,7 +35,6 @@ module.exports = {
       const intervalToDelete = await RepeatingInterval.deleteOne({
         _id: req.params.intervalID,
       });
-      res.json(intervalToDelete);
     } catch (err) {
       res.json(err);
     }
