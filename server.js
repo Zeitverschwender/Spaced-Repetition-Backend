@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require('connect-mongo')(session)
+const {refreshSession} = require('./middleware/auth')
 const passport = require('passport')
 require("dotenv").config();
 
@@ -21,8 +22,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET||'keyboard cat',
   resave: false,
   saveUninitialized: false,
+  cookie:{maxAge:60*1000},
   store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
+
+//Middleware
+app.use(refreshSession);
 //Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session())
