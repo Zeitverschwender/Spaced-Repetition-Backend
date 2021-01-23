@@ -15,10 +15,6 @@ const RepeatingIntervalSchema = mongoose.Schema(
       trim: true,
       maxLength: 520
     },
-    global: {
-      type: Boolean,
-      default: false,
-    },
     days: {
       type: [Number],
       required: true,
