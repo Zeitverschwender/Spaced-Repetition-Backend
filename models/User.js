@@ -1,4 +1,3 @@
-const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const mongoose = require('mongoose');
 const RepeatingInterval = require('./RepeatingInterval');
 const RepeatingItem = require('./RepeatingItem');

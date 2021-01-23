@@ -58,6 +58,10 @@ app.use("/auth", authRoute);
 app.get("/", (req, res) => {
   res.send("You are in the homepage!!");
 });
+
+app.get("/loggedout", (req, res) => {
+  res.send("You are logged out :(");
+});
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });

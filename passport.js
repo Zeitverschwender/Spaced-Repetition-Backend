@@ -1,5 +1,4 @@
 const googleStrategy = require("passport-google-oauth").OAuth2Strategy;
-const mongoose = require("mongoose");
 const User = require("./models/User");
 
 module.exports = function (passport) {
