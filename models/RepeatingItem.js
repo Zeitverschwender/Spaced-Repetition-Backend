@@ -6,6 +6,7 @@ const RepeatingItemSchema = mongoose.Schema(
       desc: "Item Title",
       type: String,
       required: true,
+      trim: true,
     },
     description: {
       desc: "Item Description",

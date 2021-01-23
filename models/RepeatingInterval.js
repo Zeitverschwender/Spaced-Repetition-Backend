@@ -3,11 +3,15 @@ const mongoose = require("mongoose");
 const RepeatingIntervalSchema = mongoose.Schema(
   {
     title: {
+      desc: "Interval Title",
       type: String,
       required: true,
+      trim: true,
     },
     description: {
+      desc: "Interval Description",
       type: String,
+      trim: true,
     },
     global: {
       type: Boolean,
