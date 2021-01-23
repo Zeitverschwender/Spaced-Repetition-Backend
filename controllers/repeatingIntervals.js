@@ -17,7 +17,7 @@ module.exports = {
       res.json(err);
     }
   },
-  createRepeatingInterval: async (req, res) => async (req, res) => {
+  createRepeatingInterval: async (req, res) => {
     const interval = new RepeatingInterval({
       title: req.body.title,
       description: req.body.description,
