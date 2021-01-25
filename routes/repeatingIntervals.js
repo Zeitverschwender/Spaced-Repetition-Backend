@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/RepeatingIntervals");
 
-router.get("/", controller.getRepeatingIntervals);
-router.get("/:intervalID", controller.getSpecificRepeatingInterval);
-router.post("/", controller.createRepeatingInterval);
-router.delete("/:intervalID", controller.deleteRepeatingInterval);
-router.patch("/:intervalID", controller.updateSpecificInterval);
+router.get("/", controller.getGlobalRepeatingIntervals);
+router.get("/:token",controller.getUserRepeatingIntervals);
+router.get("/:token/:intervalID", controller.getSingleUserRepeatingInterval);
+router.post("/:token", controller.createUserRepeatingInterval);
+router.delete("/:token/:intervalID", controller.deleteUserRepeatingInterval);
+router.patch("/:token/:intervalID", controller.updateUserSpecificInterval);
 
 module.exports = router;
