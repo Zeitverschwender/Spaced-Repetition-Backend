@@ -64,7 +64,7 @@ app.get("/", authMiddleware.ensureGuest,(req, res) => {
 });
 
 app.get("/login", authMiddleware.ensureAuth,(req,res) => {
-  res.send("You are logged in :)")
+  res.send(req.sessionID);
 })
 app.get("/loggedout", (req, res) => {
   res.send("You are logged out :(");
