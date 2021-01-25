@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require('connect-mongo')(session)
-const {refreshSession} = require('./middleware/auth')
+const authMiddleware = require('./middleware/auth')
 const passport = require('passport')
 require("dotenv").config();
 
@@ -22,12 +22,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET||'keyboard cat',
   resave: false,
   saveUninitialized: false,
-  cookie:{maxAge:60*1000},
+  cookie:{maxAge:1000*60*15},
   store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
 
 //Middleware
-app.use(refreshSession);
+app.use(authMiddleware.refreshSession);
 //Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session())
@@ -59,10 +59,13 @@ app.use("/repeatingitems", itemsRoute);
 app.use("/repeatingintervals", intervalsRoute);
 app.use("/auth", authRoute);
 
-app.get("/", (req, res) => {
+app.get("/", authMiddleware.ensureGuest,(req, res) => {
   res.send("You are in the homepage!!");
 });
 
+app.get("/login", authMiddleware.ensureAuth,(req,res) => {
+  res.send("You are logged in :)")
+})
 app.get("/loggedout", (req, res) => {
   res.send("You are logged out :(");
 });
