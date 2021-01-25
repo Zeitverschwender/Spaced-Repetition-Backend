@@ -66,9 +66,7 @@ module.exports = {
     try {
       const currUser = await getUserFromToken(req.params.token)
       const intervalToUpdate = currUser.customIntervals.id(req.params.intervalID);
-      intervalToUpdate.set({
-        title: req.body.title
-      })
+      intervalToUpdate.set(req.body);
       currUser.save();
       res.json(intervalToUpdate);
     } catch (err) {

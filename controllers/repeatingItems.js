@@ -59,9 +59,7 @@ module.exports = {
     try {
       const currUser = await getUserFromToken(req.params.token)
       const itemToUpdate = currUser.repeatingItems.id(req.params.itemID);
-      itemToUpdate.set({
-        title: req.body.title
-      })
+      itemToUpdate.set(req.body)
       currUser.save();
       res.json(itemToUpdate);
     } catch (err) {
