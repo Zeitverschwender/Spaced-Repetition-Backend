@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const controller =  require('../controllers/repeatingItems')
 
-router.get("/", controller.getRepeatingItems);
-router.get("/:itemID", controller.getSpecificRepeatingItem);
-router.post("/", controller.createRepeatingItem);
-router.delete("/:itemID", controller.deleteRepeatingItem);
-router.patch("/:itemID", controller.updateSpecificItem);
+router.get("/:token",controller.getRepeatingItems);
+router.get("/:token/:itemID", controller.getSpecificRepeatingItem);
+router.post("/:token", controller.createRepeatingItem);
+router.delete("/:token/:itemID", controller.deleteRepeatingItem);
+router.patch("/:token/:itemID", controller.updateSpecificItem);
 
 module.exports = router;
