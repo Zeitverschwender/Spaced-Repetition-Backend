@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
     image: {
         type: String
     },
-    repeatingitems: {
+    repeatingItems: {
         type: [RepeatingItem.schema]
     },
     customIntervals:{
