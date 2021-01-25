@@ -26,8 +26,7 @@ module.exports = {
   getSpecificRepeatingItem: async (req, res) => {
     try {
       const currUser = await getUserFromToken(req.params.token);
-      const item = currUser.repeatingItems.id(req.params.itemID);
-      res.json(item);
+      res.json(currUser.repeatingItems.id(req.params.itemID));
     } catch (err) {
       res.json(err);
     }
