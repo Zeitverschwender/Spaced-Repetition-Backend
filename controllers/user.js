@@ -20,6 +20,6 @@ module.exports = {
   },
   getUserPhoto: async(req, res) => {
     const currUser = await getUserFromToken(req.params.token);
-    res.send(currUser.image);
+    res.send(currUser.photo);
   }
 };

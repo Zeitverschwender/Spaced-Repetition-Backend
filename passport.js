@@ -14,7 +14,7 @@ module.exports = function (passport) {
         const newUser = {
           googleId: profile.id,
           displayName: profile.displayName,
-          image: profile.photos[0].value,
+          photo: profile.photos[0].value,
         };
         try {
           let user = await User.findOne({ googleId: profile.id });
