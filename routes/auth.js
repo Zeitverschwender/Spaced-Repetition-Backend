@@ -9,7 +9,9 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("/");
+    const sessionToken = req.sessionID;
+    const redirectURL = process.env.AUTH_REDIRECT + sessionToken;
+    res.redirect(redirectURL);
   }
 );
 
