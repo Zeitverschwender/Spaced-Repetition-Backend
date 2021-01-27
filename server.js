@@ -51,6 +51,7 @@ mongoose.connect(
 );
 
 //Import Routes
+const userRoute =  require('./routes/user')
 const itemsRoute = require("./routes/repeatingItems");
 const intervalsRoute = require("./routes/repeatingIntervals");
 const authRoute = require("./routes/auth");
@@ -58,6 +59,7 @@ const authRoute = require("./routes/auth");
 app.use("/repeatingitems", itemsRoute);
 app.use("/repeatingintervals", intervalsRoute);
 app.use("/auth", authRoute);
+app.use('/user', userRoute);
 
 app.get("/", authMiddleware.ensureGuest,(req, res) => {
   res.send("You are in the homepage!!");
