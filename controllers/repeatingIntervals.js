@@ -39,16 +39,16 @@ module.exports = {
     }
   },
   createUserRepeatingInterval: async (req, res) => {
-    const item = new RepeatingInterval({
+    const interval = new RepeatingInterval({
       title: req.body.title,
       description: req.body.description,
       days: req.body.days,
     });
     try {
       const currUser = await getUserFromToken(req.params.token);
-      currUser.customIntervals.push(item);
+      currUser.customIntervals.push(interval);
       await currUser.save();
-      res.json(item);
+      res.json(interval);
     } catch (err) {
       res.json({ message: err });
     }
