@@ -7,13 +7,13 @@ const RepeatingItemSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 128
+      maxLength: 128,
     },
     description: {
       desc: "Item Description",
       type: String,
       trim: true,
-      maxLength: 520
+      maxLength: 520,
     },
     interval: {
       desc: "Item Interval",
