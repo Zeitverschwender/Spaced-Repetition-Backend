@@ -55,11 +55,16 @@ const userRoute =  require('./routes/user')
 const itemsRoute = require("./routes/repeatingItems");
 const intervalsRoute = require("./routes/repeatingIntervals");
 const authRoute = require("./routes/auth");
-//Routes
+//Route Middleware
 app.use("/repeatingitems", itemsRoute);
 app.use("/repeatingintervals", intervalsRoute);
 app.use("/auth", authRoute);
 app.use('/user', userRoute);
+
+//Error handler middleware
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json(err.message);
+})
 
 app.get("/", authMiddleware.ensureGuest,(req, res) => {
   res.send("You are in the homepage!!");
