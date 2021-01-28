@@ -17,7 +17,7 @@ const RepeatingIntervalSchema = mongoose.Schema(
     },
     days: {
       type: [Number],
-      required: true,
+      validate: i => i == null || i.length > 0
     },
   },
   {
