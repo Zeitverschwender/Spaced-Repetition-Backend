@@ -34,7 +34,7 @@ module.exports = {
       const item = new RepeatingItem(req.body);
       currUser.repeatingItems.push(item);
       await currUser.save();
-      res.json(item);
+      res.status(201).json(item);
     } catch (err) {
       return next(err);
     }
