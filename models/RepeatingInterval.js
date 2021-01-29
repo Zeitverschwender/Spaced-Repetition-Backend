@@ -7,17 +7,17 @@ const RepeatingIntervalSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 128
+      maxLength: 128,
     },
     description: {
       desc: "Interval Description",
       type: String,
       trim: true,
-      maxLength: 520
+      maxLength: 520,
     },
     days: {
       type: [Number],
-      required: true,
+      validate: (i) => i == null || i.length > 0,
     },
   },
   {

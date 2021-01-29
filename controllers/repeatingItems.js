@@ -1,70 +1,66 @@
 const RepeatingItem = require("../models/RepeatingItem");
-const Session = require("../models/Session");
-const User = require("../models/User");
-
-const getUserFromToken = async(token) => {
-  try{
-    const currSession = await Session.findOne({'_id':token});
-    const sessionJson =  JSON.parse(currSession.session);
-    const currUser =  User.findById(sessionJson.passport.user);
-    return currUser
-  } catch(err) {
-    res.json(err)
-  }
-}
+const helperFunctions = require("./helperFunctions");
 
 module.exports = {
-  
-  getRepeatingItems: async (req, res) => {
+  getRepeatingItems: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
+      const currUser = await helperFunctions.getUser(req.params.token);
       res.json(currUser.repeatingItems);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  getSpecificRepeatingItem: async (req, res) => {
+  getSpecificRepeatingItem: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
-      res.json(currUser.repeatingItems.id(req.params.itemID));
+      const currUser = await helperFunctions.getUser(req.params.token);
+      const currItem = currUser.repeatingItems.id(req.params.itemID);
+      helperFunctions.checkVarNotNull(currItem, "Item ID is not valid");
+      res.json(currItem);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  createRepeatingItem: async (req, res) => {
-    const item = new RepeatingItem({
-      title: req.body.title,
-      description: req.body.description,
-      interval: req.body.interval,
-    });
+  createRepeatingItem: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
+      const currUser = await helperFunctions.getUser(req.params.token);
+      helperFunctions.checkVarNotNull(
+        req.body.interval,
+        "interval is a required field."
+      );
+      helperFunctions.checkVarNotNull(
+        req.body.title,
+        "title is a required field."
+      );
+      const item = new RepeatingItem(req.body);
       currUser.repeatingItems.push(item);
       await currUser.save();
-      res.json(item);
+      res.status(201).json(item);
     } catch (err) {
-      res.json({ message: err });
+      return next(err);
     }
   },
-  deleteRepeatingItem: async (req, res) => {
+  deleteRepeatingItem: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
-      currUser.repeatingItems.id(req.params.itemID).remove();
+      const currUser = await helperFunctions.getUser(req.params.token);
+      const currItem = currUser.repeatingItems.id(req.params.itemID);
+      helperFunctions.checkVarNotNull(currItem, "Item ID is not valid");
+      currItem.remove();
       currUser.save();
+      res.json("Item deleted successfully.");
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  updateSpecificItem: async (req, res) => {
+  updateSpecificItem: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token)
+      const currUser = await helperFunctions.getUser(req.params.token);
       const itemToUpdate = currUser.repeatingItems.id(req.params.itemID);
-      itemToUpdate.set(req.body)
+      helperFunctions.checkVarNotNull(itemToUpdate, "Item ID is not valid");
+      itemToUpdate.set(req.body);
       currUser.save();
       res.json(itemToUpdate);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  
 };

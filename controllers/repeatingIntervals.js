@@ -1,76 +1,83 @@
 const RepeatingInterval = require("../models/RepeatingInterval");
-const Session = require("../models/Session")
-const User = require("../models/User")
-
-const getUserFromToken = async(token) => {
-  try{
-    const currSession = await Session.findOne({'_id':token});
-    const sessionJson =  JSON.parse(currSession.session);
-    const currUser =  User.findById(sessionJson.passport.user);
-    return currUser
-  } catch(err) {
-    res.json(err)
-  }
-}
+const helperFunctions = require("./helperFunctions");
 
 module.exports = {
-  getGlobalRepeatingIntervals: async (req, res) => {
+  getGlobalRepeatingIntervals: async (req, res, next) => {
     try {
       const intervals = await RepeatingInterval.find();
       res.json(intervals);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  getUserRepeatingIntervals: async (req, res) => {
+  getUserRepeatingIntervals: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
+      const currUser = await helperFunctions.getUser(req.params.token);
       res.json(currUser.customIntervals);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  getSingleUserRepeatingInterval: async(req,res) => {
+  getSingleUserRepeatingInterval: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
-      res.json(currUser.customIntervals.id(req.params.intervalID));
+      const currUser = await helperFunctions.getUser(req.params.token);
+      const currInterval = currUser.customIntervals.id(req.params.intervalID);
+      helperFunctions.checkVarNotNull(currInterval, "Interval ID is not valid");
+      res.json(currInterval);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  createUserRepeatingInterval: async (req, res) => {
-    const item = new RepeatingInterval({
-      title: req.body.title,
-      description: req.body.description,
-      days: req.body.days,
-    });
+  createUserRepeatingInterval: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
-      currUser.customIntervals.push(item);
+      const currUser = await helperFunctions.getUser(req.params.token);
+
+      if (req.body.days == null || req.body.days.length < 1) {
+        const err = new Error(
+          "days is a required field and it's length should be more than zero."
+        );
+        err.status = 400;
+        return next(err);
+      }
+      helperFunctions.checkVarNotNull(
+        req.body.title,
+        "title is a required field."
+      );
+      const interval = new RepeatingInterval(req.body);
+      currUser.customIntervals.push(interval);
       await currUser.save();
-      res.json(item);
+      res.status(201).json(interval);
     } catch (err) {
-      res.json({ message: err });
+      return next(err);
     }
   },
-  deleteUserRepeatingInterval: async (req, res) => {
+  deleteUserRepeatingInterval: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token);
-      currUser.customIntervals.id(req.params.intervalID).remove();
+      const currUser = await helperFunctions.getUser(req.params.token);
+      const currInterval = currUser.customIntervals.id(req.params.intervalID);
+      helperFunctions.checkVarNotNull(currInterval, "Interval ID is not valid");
+      currInterval.remove();
       currUser.save();
+      res.send("Item deleted.");
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
-  updateUserSpecificInterval: async (req, res) => {
+  updateUserSpecificInterval: async (req, res, next) => {
     try {
-      const currUser = await getUserFromToken(req.params.token)
-      const intervalToUpdate = currUser.customIntervals.id(req.params.intervalID);
+      const currUser = await helperFunctions.getUser(req.params.token);
+      const intervalToUpdate = currUser.customIntervals.id(
+        req.params.intervalID
+      );
       intervalToUpdate.set(req.body);
+      helperFunctions.checkVarNotNull(
+        intervalToUpdate,
+        "Interval ID is not valid"
+      );
       currUser.save();
       res.json(intervalToUpdate);
     } catch (err) {
-      res.json(err);
+      return next(err);
     }
   },
 };
