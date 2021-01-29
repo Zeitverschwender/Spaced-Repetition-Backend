@@ -20,7 +20,7 @@ module.exports = {
   },
   getUserStatus: async(req, res, next) => {
     try {
-      const currUser = await helperFunctions.getUser(req.params.token);
+      await helperFunctions.getUser(req.params.token);
       res.send('Logged In');
     }
     catch (err) {
