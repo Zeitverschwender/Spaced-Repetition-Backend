@@ -15,6 +15,6 @@ router.get(
   }
 );
 
-router.get("/logout", controller.logout);
+router.get("/logout/:token", controller.logout);
 
 module.exports = router;
