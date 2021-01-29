@@ -14,10 +14,5 @@ module.exports = {
     } else {
       return next();
     }
-  },
-  refreshSession: (req, res, next) => {
-    req.session._garbage = Date();
-    req.session.touch();
-    next();
-  },
+  }
 };

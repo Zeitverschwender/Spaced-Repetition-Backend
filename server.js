@@ -2,13 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
-const MongoStore = require('connect-mongo')(session)
-const authMiddleware = require('./middleware/auth')
-const passport = require('passport')
+const MongoStore = require("connect-mongo")(session);
+const authMiddleware = require("./middleware/auth");
+const passport = require("passport");
 require("dotenv").config();
 
 //Setup Passport
-require('./passport')(passport);
+require("./passport")(passport);
 
 //Setup App
 const app = express();
@@ -18,19 +18,22 @@ app.use(cors());
 app.use(express.json());
 
 //Session
-app.use(session({
-  secret: process.env.SESSION_SECRET||'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-  cookie:{maxAge:1000*60*15},
-  store: new MongoStore({mongooseConnection: mongoose.connection})
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "keyboard cat",
+    resave: true,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+      maxAge: 1000 * 60 * 15,
+    },
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  })
+);
 
-//Middleware
-app.use(authMiddleware.refreshSession);
 //Passport Middleware
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
 
 const port = process.env.PORT || 8000;
 
@@ -39,7 +42,7 @@ mongoose.connect(
   process.env.DB_CONNECTION,
   {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   },
   (err) => {
     if (err) {
@@ -51,7 +54,7 @@ mongoose.connect(
 );
 
 //Import Routes
-const userRoute =  require('./routes/user')
+const userRoute = require("./routes/user");
 const itemsRoute = require("./routes/repeatingItems");
 const intervalsRoute = require("./routes/repeatingIntervals");
 const authRoute = require("./routes/auth");
@@ -59,20 +62,20 @@ const authRoute = require("./routes/auth");
 app.use("/repeatingitems", itemsRoute);
 app.use("/repeatingintervals", intervalsRoute);
 app.use("/auth", authRoute);
-app.use('/user', userRoute);
+app.use("/user", userRoute);
 
 //Error handler middleware
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json(err.message);
-})
+});
 
-app.get("/", authMiddleware.ensureGuest,(req, res) => {
+app.get("/", authMiddleware.ensureGuest, (req, res) => {
   res.send("You are in the homepage!!");
 });
 
-app.get("/login", authMiddleware.ensureAuth,(req,res) => {
+app.get("/login", authMiddleware.ensureAuth, (req, res) => {
   res.send(req.sessionID);
-})
+});
 app.get("/loggedout", (req, res) => {
   res.send("You are logged out :(");
 });
