@@ -10,7 +10,7 @@ module.exports = {
       return next(err);
     }
   },
-  getUserPhoto: async (req, res) => {
+  getUserPhoto: async (req, res, next) => {
     try {
       const currUser = await helperFunctions.getUser(req.params.token);
       res.send(currUser.photo);
@@ -18,7 +18,7 @@ module.exports = {
       return next(err);
     }
   },
-  getUserStatus: async(req, res) => {
+  getUserStatus: async(req, res, next) => {
     try {
       const currUser = await helperFunctions.getUser(req.params.token);
       res.send('Logged In');
