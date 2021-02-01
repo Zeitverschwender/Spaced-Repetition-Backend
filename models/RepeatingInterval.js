@@ -18,8 +18,8 @@ const RepeatingIntervalSchema = mongoose.Schema(
     days: {
       desc: "Array of number of days before next notification.",
       type: [Number],
-      validate: (i) => i == null || i.length > 0,
-    },
+      required: true
+    }
   },
   {
     strict: true,
