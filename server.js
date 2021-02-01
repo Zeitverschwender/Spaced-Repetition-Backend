@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
-const authMiddleware = require("./middleware/auth");
 const passport = require("passport");
 require("dotenv").config();
 
@@ -13,7 +12,12 @@ require("./passport")(passport);
 //Setup App
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost", "http://localhost:3000"],
+  })
+);
 
 app.use(express.json());
 
@@ -25,6 +29,8 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     cookie: {
+      sameSite: "lax",
+      httpOnly: false,
       maxAge: 1000 * 60 * 15,
     },
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
@@ -69,11 +75,11 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json(err.message);
 });
 
-app.get("/", authMiddleware.ensureGuest, (req, res) => {
-  res.send("You are in the homepage!!");
+app.get("/", (req, res) => {
+  res.send("You are in the homepage 1 !!");
 });
 
-app.get("/login", authMiddleware.ensureAuth, (req, res) => {
+app.get("/login", (req, res) => {
   res.send(req.sessionID);
 });
 app.get("/loggedout", (req, res) => {
