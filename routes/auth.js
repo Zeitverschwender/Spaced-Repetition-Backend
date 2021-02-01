@@ -11,7 +11,9 @@ router.get(
   (req, res) => {
     const sessionToken = req.sessionID;
     const redirectURL = process.env.AUTH_REDIRECT + sessionToken;
-    res.redirect(redirectURL);
+    req.session.save((err) => {
+      res.redirect(redirectURL);
+    });
   }
 );
 
