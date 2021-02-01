@@ -31,13 +31,21 @@ module.exports = {
   createUserRepeatingInterval: async (req, res, next) => {
     try {
       const currUser = await helperFunctions.getUser(req.params.token);
-
       if (req.body.days == null || req.body.days.length < 1) {
         const err = new Error(
           "days is a required field and it's length should be more than zero."
         );
         err.status = 400;
         return next(err);
+      }
+      for(let i = 1; i < req.body.days.length; i++){
+        if (req.body.days[i] < 0 || req.body.days[i] <= req.body.days[i-1]){
+          const err = new Error(
+            "Each day value should be positive and be greater than the previous day value."
+          )
+          err.status = 400;
+          return next(err)
+        }
       }
       helperFunctions.checkVarNotNull(
         req.body.title,
