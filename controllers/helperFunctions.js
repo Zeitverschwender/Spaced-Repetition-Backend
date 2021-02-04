@@ -31,7 +31,7 @@ module.exports = {
     if (variable == null) {
       const err = new Error(message);
       err.status = 400;
-      return next(err);
+      throw err;
     }
   },
 };
