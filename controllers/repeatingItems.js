@@ -1,4 +1,5 @@
 const RepeatingItem = require("../models/RepeatingItem");
+const RepeatingInterval = require("../models/RepeatingInterval");
 const helperFunctions = require("./helperFunctions");
 
 module.exports = {
@@ -31,6 +32,11 @@ module.exports = {
         req.body.title,
         "title is a required field."
       );
+      const ifUserInterval = currUser.customIntervals.id(req.body.interval)
+      const ifGlobalInterbal = await RepeatingInterval.findOne({"_id": req.body.interval})
+      const itemInterval = ifUserInterval || ifGlobalInterbal;
+      helperFunctions.checkVarNotNull(itemInterval, "interval id is not valid.")
+      req.body.interval = itemInterval;
       const item = new RepeatingItem(req.body);
       currUser.repeatingItems.push(item);
       await currUser.save();

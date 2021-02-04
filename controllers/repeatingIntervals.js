@@ -63,6 +63,13 @@ module.exports = {
     try {
       const currUser = await helperFunctions.getUser(req.params.token);
       const currInterval = currUser.customIntervals.id(req.params.intervalID);
+      currUser.repeatingItems.map((item) => {
+        if(item.interval._id == req.params.intervalID) {
+          const err = new Error("Interval is currently used in an item.")
+          err.status = 400;
+           throw err;
+        }
+      })
       helperFunctions.checkVarNotNull(currInterval, "Interval ID is not valid");
       currInterval.remove();
       currUser.save();
@@ -77,11 +84,16 @@ module.exports = {
       const intervalToUpdate = currUser.customIntervals.id(
         req.params.intervalID
       );
-      intervalToUpdate.set(req.body);
       helperFunctions.checkVarNotNull(
         intervalToUpdate,
         "Interval ID is not valid"
       );
+      currUser.repeatingItems.map((item) => {
+        if(item.interval._id == req.params.intervalID) {
+          item.interval = ({...JSON.parse(JSON.stringify(item.interval)) , ...req.body});
+        }
+      })
+      intervalToUpdate.set(req.body);
       currUser.save();
       res.json(intervalToUpdate);
     } catch (err) {

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const RepeatingInterval = require("./RepeatingInterval");
 
 const RepeatingItemSchema = mongoose.Schema(
   {
@@ -22,10 +23,14 @@ const RepeatingItemSchema = mongoose.Schema(
     },
     interval: {
       desc: "Item Interval",
-      type: mongoose.Schema.Types.ObjectId,
-      reference: "RepeatingInterval",
+      type: RepeatingInterval.schema,
       required: true,
     },
+    phase: {
+      desc: "Interval Phase",
+      type: Number,
+      default: 1
+    }
   },
   {
     strict: true,
