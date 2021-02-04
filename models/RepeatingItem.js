@@ -10,10 +10,10 @@ const RepeatingItemSchema = mongoose.Schema(
       trim: true,
       maxLength: 128,
     },
-    streak: {
+    streakStart: {
       desc: "Start date of streak",
       type: Date,
-      default: Date.now()
+      default:Date.now()
     },
     description: {
       desc: "Item Description",
