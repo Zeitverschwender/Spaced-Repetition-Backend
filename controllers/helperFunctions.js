@@ -27,7 +27,7 @@ module.exports = {
     }
     return currUser;
   },
-  checkVarNotNull: async (variable, message) => {
+  checkVarNotNull: (variable, message) => {
     if (variable == null) {
       const err = new Error(message);
       err.status = 400;
