@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../controllers/RepeatingIntervals");
+const controller = require("../controllers/repeatingIntervals");
 
 router.get("/", controller.getGlobalRepeatingIntervals);
 router.get("/:token",controller.getUserRepeatingIntervals);
