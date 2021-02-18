@@ -30,7 +30,7 @@ app.use(
     rolling: true,
     cookie: {
       sameSite: "lax",
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 1000 * 60 * 15,
     },
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
