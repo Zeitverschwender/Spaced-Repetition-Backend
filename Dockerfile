@@ -1,14 +1,19 @@
-FROM node:14.15.4-alpine3.12
+FROM node:14.16.1-alpine3.13
 
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-WORKDIR /app
+WORKDIR /home/node/app
 
 COPY package*.json ./
+
+USER node
+
 RUN npm install --production
 
-COPY . .
+COPY --chown=node:node . .
+
+ENV NODE_ENV=production
 
 EXPOSE 8000
 
-USER node
 CMD ["node", "server.js"]
