@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spacedrepetition-api-deployment
+  namespace: spacedrepetition
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spacedrepetition-api
+  template:
+    metadata:
+      labels:
+        app: spacedrepetition-api
+    spec:
+      containers:
+        - name: spacedrepetition-api
+          image: digitalphoenixx/spacedrepetition-api:latest
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PORT
+                  name: spacedrepetition-api-configmap
+            - name: AUTH_REDIRECT
+              valueFrom:
+                configMapKeyRef:
+                  key: AUTH_REDIRECT
+                  name: spacedrepetition-api-configmap
+            - name: FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: FRONTEND_URL
+                  name: spacedrepetition-api-configmap
+            - name: DB_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  key: DB_CONNECTION
+                  name: spacedrepetition-api-secret
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: SESSION_SECRET
+                  name: spacedrepetition-api-secret
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: GOOGLE_CLIENT_ID
+                  name: spacedrepetition-api-secret
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: GOOGLE_CLIENT_SECRET
+                  name: spacedrepetition-api-secret
+          ports:
+            - containerPort: 8000

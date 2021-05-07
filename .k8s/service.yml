@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spacedrepetition-api-service
+  namespace: spacedrepetition
+spec:
+  selector:
+    app: spacedrepetition-api
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 8000
