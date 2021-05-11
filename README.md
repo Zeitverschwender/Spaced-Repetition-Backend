@@ -5,6 +5,8 @@
 
 REST API for [Spaced Repetition](https://github.com/Zeitverschwender/Spaced-Repetition) Frontend app.
 
+View [Endpoints Docs](./docs/endpoints.md).
+
 ## Run the code locally
 
 1) Clone the repo
